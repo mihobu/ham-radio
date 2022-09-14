@@ -177,4 +177,4 @@ ax.set_ylim([lly-p, ury+p])
 fn = '/Users/mhb/OneDrive/hamradio/maps/Grid Maps/all-qsos-2.jpg'
 fig.savefig(fn, bbox_inches='tight', pad_inches=0)
 
-os.system('aws s3 cp --acl public-read ~/OneDrive/hamradio/maps/Grid\ Maps/all-qsos-2.jpg s3://w8mhb.com/all-qsos.jpg')
+os.system('/usr/local/bin/aws s3 cp --acl public-read ~/OneDrive/hamradio/maps/Grid\ Maps/all-qsos-2.jpg s3://w8mhb.com/all-qsos.jpg')
