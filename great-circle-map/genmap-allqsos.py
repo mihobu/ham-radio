@@ -50,6 +50,9 @@ print('Loaded {} QSOs and {} distinct grid squares.'.format(
     qso_df['grid'].nunique()
 ))
 
+log_start = dt.datetime.strptime(qso_df['qsodate'].min(), "%Y%m%d").strftime("%Y-%m-%d")
+log_end = dt.datetime.strptime(qso_df['qsodate'].max(), "%Y%m%d").strftime("%Y-%m-%d")
+
 # ========================================================================
 # Find list of NEW grid squares in the last N days
 # ========================================================================
@@ -160,9 +163,12 @@ for row in grid_df.iterrows():
             zorder=20
         )
 
+# Prepare image description
+message = 'ARS W8MHB • {} GRID SQUARES WORKED {} TO {}'.format(len(grid_df), log_start, log_end)
+if len(newsquares) > 0:
+    message = message + ' ({} NEW SINCE {})'.format(len(newsquares), new_start)
+
 # Add a description in the lower left
-message = 'ARS W8MHB • {} GRID SQUARES WORKED SINCE 2022.02.16 • {} NEW {} – {}'.format(
-    len(grid_df), len(newsquares), new_start, new_end)
 ax.annotate(
     message, xy=(0., 0.), xycoords='axes fraction', color='#333333',
     #backgroundcolor='white',
@@ -174,7 +180,7 @@ p = 1000000
 ax.set_xlim([llx-p, urx+p])
 ax.set_ylim([lly-p, ury+p])
 
-fn = '/Users/mhb/OneDrive/hamradio/maps/Grid Maps/all-qsos-2.jpg'
+fn = '/Users/mhb/tmp/w8mhb-grid-square-map.jpg'
 fig.savefig(fn, bbox_inches='tight', pad_inches=0)
 
-os.system('/usr/local/bin/aws s3 cp --acl public-read ~/OneDrive/hamradio/maps/Grid\ Maps/all-qsos-2.jpg s3://w8mhb.com/all-qsos.jpg')
+os.system('/usr/local/bin/aws s3 cp /Users/mhb/tmp/w8mhb-grid-square-map.jpg s3://downloads.monkeywalk.com/ham-radio/w8mhb-grid-square-map.jpg')
